@@ -49,7 +49,7 @@ func getDriversInfoFromRemote() {
 }
 
 // Parses the cached driver's information
-func parseDriversCache() {
+func parseDriversCache() []Driver {
 	driversCacheBytes, err := os.ReadFile(constants.DriversCacheFile)
 	if err != nil {
 		fmt.Println("Error parsing driver's cache file")
@@ -74,15 +74,15 @@ func parseDriversCache() {
 		}
 	}
 	fmt.Printf("Found %d unique driver entries", len(uniqueDriverEntries))
-	fmt.Println(uniqueDriverEntries)
+	return uniqueDriverEntries
 }
 
-func InitiateDriversInfo() {
+func InitiateDriversInfo() []Driver {
 	driversCacheFileSize, err := os.Stat(constants.DriversCacheFile)
 	if err != nil || driversCacheFileSize.Size() == 0 {
 		fmt.Println("Driver's cache file does not exist on the server. Retrieving from remote")
 		getDriversInfoFromRemote()
 	}
 	fmt.Println("Parsing cached driver's info")
-	parseDriversCache()
+	return parseDriversCache()
 }
